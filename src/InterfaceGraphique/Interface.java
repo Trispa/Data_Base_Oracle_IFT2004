@@ -5,12 +5,13 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import Bd_donne.Connexion;
 import Bd_donne.Executer;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 
 public class Interface extends JFrame implements ActionListener {
@@ -19,15 +20,17 @@ public class Interface extends JFrame implements ActionListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private Connexion m_connexion;
-	private Executer m_execution ;
-	private JTextField m_personne;
+	private Executer m_execution;
+	private JTextField m_prenom;
 	private JTextField m_nom;
 	private JTextField m_numero;
 	private JTextField m_position;
 	private JTextField m_noPersonne;
-
+	
+	private static String PRENOM = "champ personne";
+	
 	private static String CHERCHER = "rechercher une Personne";
 	private static String CHARGER = "Charger";
 	private static String AJOUTER = "Ajouter";
@@ -41,8 +44,7 @@ public class Interface extends JFrame implements ActionListener {
 	private JButton btnQuitter;
 
 	public Interface() throws SQLException {
-		
-		m_connexion = new Connexion();
+
 		setTitle("User Interface");
 		setBounds(100, 100, 800, 550);
 		getContentPane().setLayout(null);
@@ -51,37 +53,101 @@ public class Interface extends JFrame implements ActionListener {
 		JLabel lblPersonne = new JLabel("Personne");
 		lblPersonne.setBounds(12, 13, 56, 16);
 		getContentPane().add(lblPersonne);
+		
 
 		JLabel lblPrnom = new JLabel("Pr\u00E9nom");
 		lblPrnom.setBounds(12, 37, 56, 16);
 		getContentPane().add(lblPrnom);
+		
+		m_prenom = new JTextField();
+		m_prenom.setBounds(80, 34, 116, 22);
+		getContentPane().add(m_prenom);
+		m_prenom.setColumns(10);
+		
+		m_prenom.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) {
+			    changed();
+			  }
 
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				changed();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				changed();
+			}
+		});
+		
 		JLabel lblNom = new JLabel("Nom");
 		lblNom.setBounds(12, 66, 56, 16);
 		getContentPane().add(lblNom);
+
+		m_nom = new JTextField();
+		m_nom.setBounds(80, 63, 116, 22);
+		m_nom.addActionListener(this);
+		m_nom.setActionCommand("NOM");
+		getContentPane().add(m_nom);
+		m_nom.setColumns(10);
+		
+		m_nom.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) {
+			    changed();
+			  }
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				changed();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				changed();
+			}
+		});
 
 		JLabel lblNumero = new JLabel("Numero");
 		lblNumero.setBounds(12, 104, 56, 16);
 		getContentPane().add(lblNumero);
 
+		m_numero = new JTextField();
+		m_numero.setColumns(10);
+		m_numero.addActionListener(this);
+		m_numero.setActionCommand("NUMERO");
+		m_numero.setBounds(80, 101, 116, 22);
+		getContentPane().add(m_numero);
+		
+		m_numero.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) {
+			    changed();
+			  }
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				changed();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				changed();
+			}
+		});
+		
+		
 		JLabel lblDateDeNaissance = new JLabel("Date de Naissance");
 		lblDateDeNaissance.setBounds(12, 147, 132, 16);
 		getContentPane().add(lblDateDeNaissance);
 
-		m_personne = new JTextField();
-		m_personne.setBounds(80, 34, 116, 22);
-		getContentPane().add(m_personne);
-		m_personne.setColumns(10);
+		
 
-		m_nom = new JTextField();
-		m_nom.setBounds(80, 63, 116, 22);
-		getContentPane().add(m_nom);
-		m_nom.setColumns(10);
 
-		m_numero = new JTextField();
-		m_numero.setColumns(10);
-		m_numero.setBounds(80, 101, 116, 22);
-		getContentPane().add(m_numero);
 
 		JTextArea p_ducments = new JTextArea();
 		p_ducments.setBounds(12, 246, 201, 209);
@@ -110,6 +176,7 @@ public class Interface extends JFrame implements ActionListener {
 		// bouton Chercher
 		btnChercher = new JButton("Chercher");
 		btnChercher.setActionCommand(CHERCHER);
+		btnChercher.setEnabled(false);
 		btnChercher.addActionListener(this);
 		btnChercher.setBounds(659, 33, 97, 25);
 		getContentPane().add(btnChercher);
@@ -117,6 +184,7 @@ public class Interface extends JFrame implements ActionListener {
 		// bouton Charger
 		btnCharger = new JButton("Charger");
 		btnCharger.setBounds(659, 210, 97, 25);
+		btnCharger.setEnabled(false);
 		btnCharger.addActionListener(this);
 		btnCharger.setActionCommand(CHARGER);
 		getContentPane().add(btnCharger);
@@ -124,6 +192,7 @@ public class Interface extends JFrame implements ActionListener {
 		// bouton Ajouter
 		btnAjouter = new JButton("Ajouter");
 		btnAjouter.setBounds(659, 276, 97, 25);
+		btnAjouter.setEnabled(false);
 		btnAjouter.addActionListener(this);
 		btnAjouter.setActionCommand(AJOUTER);
 		getContentPane().add(btnAjouter);
@@ -131,6 +200,7 @@ public class Interface extends JFrame implements ActionListener {
 		// Bouton OK
 		btnOk = new JButton("OK");
 		btnOk.setBounds(659, 333, 97, 25);
+		btnOk.setEnabled(false);
 		btnOk.addActionListener(this);
 		btnOk.setActionCommand(OK);
 		getContentPane().add(btnOk);
@@ -138,6 +208,7 @@ public class Interface extends JFrame implements ActionListener {
 		// bouton Quitter
 		btnQuitter = new JButton("Quitter");
 		btnQuitter.setBounds(659, 407, 97, 25);
+		btnQuitter.setEnabled(false);
 		btnQuitter.addActionListener(this);
 		btnQuitter.setActionCommand(QUITTER);
 		getContentPane().add(btnQuitter);
@@ -149,6 +220,7 @@ public class Interface extends JFrame implements ActionListener {
 
 		m_position = new JTextField();
 		m_position.setBounds(460, 334, 116, 22);
+		m_position.setEditable(false);
 		getContentPane().add(m_position);
 		m_position.setColumns(10);
 
@@ -159,14 +231,27 @@ public class Interface extends JFrame implements ActionListener {
 
 		m_noPersonne = new JTextField();
 		m_noPersonne.setBounds(460, 408, 116, 22);
+		m_noPersonne.setEditable(false);
 		getContentPane().add(m_noPersonne);
 		m_noPersonne.setColumns(10);
+		
+		
+
+	}
+	
+	public void changed()
+	{
+		if(m_prenom.getText().equals("")&&(m_nom.getText().equals("")&&m_numero.getText().equals("")))
+			btnChercher.setEnabled(false);
+		else
+			btnChercher.setEnabled(true);
+		 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-
+		
 		if (command.equals(CHERCHER)) {
 			// TODO
 		} else if (command.equals(CHARGER)) {
