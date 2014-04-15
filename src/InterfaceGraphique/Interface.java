@@ -12,6 +12,8 @@ import Bd_donne.Connexion;
 import Bd_donne.Executer;
 
 import java.awt.event.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class Interface extends JFrame implements ActionListener {
@@ -22,14 +24,16 @@ public class Interface extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	private Connexion m_connexion;
-	private Executer m_execution;
+	private Executer m_execution = new Executer();
 	private JTextField m_prenom;
 	private JTextField m_nom;
 	private JTextField m_numero;
 	private JTextField m_position;
 	private JTextField m_noPersonne;
 	
-	private static String PRENOM = "champ personne";
+	private JTextArea txtEvenement;
+	
+
 	
 	private static String CHERCHER = "rechercher une Personne";
 	private static String CHARGER = "Charger";
@@ -165,9 +169,9 @@ public class Interface extends JFrame implements ActionListener {
 		lblDocument.setBounds(272, 231, 69, 16);
 		getContentPane().add(lblDocument);
 
-		JTextArea txtrEvenement = new JTextArea();
-		txtrEvenement.setBounds(258, 31, 310, 123);
-		getContentPane().add(txtrEvenement);
+		txtEvenement = new JTextArea();
+		txtEvenement.setBounds(258, 31, 310, 123);
+		getContentPane().add(txtEvenement);
 
 		JLabel lblEvenements = new JLabel("Evenements");
 		lblEvenements.setBounds(258, 13, 83, 16);
@@ -253,7 +257,36 @@ public class Interface extends JFrame implements ActionListener {
 		String command = e.getActionCommand();
 		
 		if (command.equals(CHERCHER)) {
-			// TODO
+			
+			 try {
+			ResultSet rs = m_execution.recherchePrNumero(Integer.parseInt(m_numero.getText()));
+			ResultSetMetaData rsmd = rs.getMetaData();
+			  //Le nombre de colonnes
+			
+			  int numCols = rsmd.getColumnCount();
+			  //Au départ, le rs est positionné avant le début
+			  boolean more = rs.next();
+
+			  //Parcours des colonnes pour afficher leur labels ainsi que les
+			  // valeurs et ceci pour chaque enregistrement
+			  while (more) {
+			      for (int i=1; i<=numCols; i++)
+			      	{
+			    	  txtEvenement.append( rs.getString(i)+ " ");
+			        }
+			      txtEvenement.append( "\n");
+			  }
+			     
+					more = rs.next();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} //passage au prochain enregistrement
+			    
+
+			  
+			  
+	  
 		} else if (command.equals(CHARGER)) {
 			// TODO
 		} else if (command.equals(AJOUTER)) {
