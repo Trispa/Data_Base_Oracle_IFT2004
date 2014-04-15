@@ -46,7 +46,7 @@ public class Connexion {
 
 	}
 	
-	public boolean makeConnexion() throws ClassNotFoundException, SQLException
+	public boolean makeConnexion() throws Exception
 	{
 		String login;
 		String passwd;

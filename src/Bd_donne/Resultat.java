@@ -5,6 +5,10 @@ import java.util.HashMap;
 
 public class Resultat {
 	public ArrayList<Personne> listeDesPersonnes = new ArrayList<Personne>();
+	public Resultat()
+	{
+		
+	}
 	public class Personne{
 		
 		public String m_numero;
