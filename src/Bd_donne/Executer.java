@@ -1,22 +1,23 @@
 package Bd_donne;
 
-import java.sql.*;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
 
 public class Executer {
 	
-	Statement stmt;
-
-	public ResultSet recherchePrNumero(int  numero) throws SQLException
+	private static Statement m_executeur;
+	public  Executer(Statement executeur)
 	{
-		String requete_sql="Select * from bidon ";//vous devez créer une table bidon dans votr compte
-		
-	   //les requêtes SQL DML qui retournent des données
-	  ResultSet rs = stmt.executeQuery (requete_sql);
-	  //Obtention des méta-données de la table
-	  //Soit nom et type des colonnes
-	  //Le nombre de colonnes
-	return rs;
-  		
+		m_executeur = executeur;
+
 	}
 	
+	public ResultSet executeQuery(String requete) throws SQLException
+	{
+		return m_executeur.executeQuery (requete);
+	}
 }
