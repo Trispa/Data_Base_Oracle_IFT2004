@@ -15,9 +15,9 @@ public class Connexion {
 
 	public Connexion(){
 
-//		String login = "Pmdio7"; // vous pouvez écrire directement le login ici et ne
+//		String login = ""; // vous pouvez écrire directement le login ici et ne
 //							// pas poser la question juste après
-//		String passwd = "trispa"; // vous pouvez écrire directement le mot de passe
+//		String passwd = ""; // vous pouvez écrire directement le mot de passe
 //								// ici et ne pas poser la question juste après
 //
 //		try {
