@@ -1,5 +1,6 @@
 package Bd_donne;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,6 +13,7 @@ public class Executer {
 	public  Executer(Statement executeur)
 	{
 		m_executeur = executeur;
+
 	}
 	
 	public ResultSet executeQuery(String requete) throws SQLException
