@@ -9,24 +9,28 @@ public class Resultat {
 	{
 		
 	}
-	public class Personne{
+	public static class Personne{
 		
 		public String m_numero;
 		public String m_nom;
 		public String m_prenom;
+		public String m_dateNaissance;
 		public ArrayList<Evenement> m_listeEvenements;
 		public ArrayList<Document> m_listeDocuments;
 	
-		public Personne(String numero, String nom, String prenom)
+		public Personne(String numero, String nom, String prenom, String dateNaisse)
 		{
 			m_numero = numero;
 			m_nom = nom;
 			m_prenom = prenom;
+			m_dateNaissance = dateNaisse;
+			m_listeEvenements = new ArrayList<Evenement>();
+			m_listeDocuments = new ArrayList<Document>();
 		}
 	
 	}
 	
-	public class Evenement{
+	public static class Evenement{
 		public String m_date;
 		public String m_type;
 		public String m_lieu;
@@ -40,12 +44,18 @@ public class Resultat {
 		
 	}
 	
-	public class Document{
+	public static class Document{
 		public String m_type;
 		public String m_titre;
 		public String m_date;
 		public String m_auteur;
-		public HashMap<String, Personne> m_mapPositionPersonne;
+		public String m_numeroDoc;
+		public HashMap<String, String> m_mapPositionPersonne;
+		
+		public Document(String numero, String type, String titre, String date, String auteur)
+		{
+			
+		}
 	}
 	
 	
