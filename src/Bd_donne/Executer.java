@@ -52,4 +52,9 @@ public class Executer {
 	{
 		return new Resultat();
 	}
+
+	public ResultSet recherchePrNumero(int parseInt) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
