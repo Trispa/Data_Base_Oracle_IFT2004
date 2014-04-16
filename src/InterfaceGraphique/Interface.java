@@ -28,9 +28,9 @@ public class Interface extends JFrame implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Connexion m_connexion;
+
 	private Executer m_execution;
-	private Resultat m_resultat = new Resultat();
+	private Resultat m_resultat;
 	private JTextField m_prenom;
 	private JTextField m_nom;
 	private JTextField m_numero;
@@ -55,8 +55,10 @@ public class Interface extends JFrame implements ActionListener {
 	private JButton btnOk;
 	private JButton btnQuitter;
 
-	public Interface() throws SQLException {
-
+	public Interface(Executer executeur) throws SQLException {
+		
+		m_execution = executeur;
+		
 		setTitle("User Interface");
 		setBounds(100, 100, 800, 550);
 		getContentPane().setLayout(null);
@@ -326,7 +328,8 @@ public class Interface extends JFrame implements ActionListener {
 		String command = e.getActionCommand();
 		afficherEvenementPersonne(m_resultat);
 		if (command.equals(CHERCHER)) {
-			
+			m_resultat = m_execution.recherche(m_numero.getText(), m_prenom.getText(), m_nom.getText());
+			afficherEvenementPersonne(m_resultat);
 		} else if (command.equals(CHARGER)) {
 			// TODO
 		} else if (command.equals(AJOUTER)) {

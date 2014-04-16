@@ -14,7 +14,8 @@ public class Main {
 				Connexion m_connexion = new Connexion();
 				if(m_connexion.makeConnexion())
 				{
-					Interface mon_Interface = new Interface();
+					Executer executeur = new Executer(m_connexion.stmt);
+					Interface mon_Interface = new Interface(executeur);
 					mon_Interface.setVisible(true);
 				}
 			

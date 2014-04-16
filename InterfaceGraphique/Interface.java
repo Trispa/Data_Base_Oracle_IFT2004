@@ -59,8 +59,9 @@ public class Interface extends JFrame implements ActionListener {
 	
 	private JTextArea p_ducments;
 
-	public Interface() throws SQLException {
-
+	public Interface(Executer executeur) throws SQLException {
+		
+		m_execution = executeur;
 		setTitle("User Interface");
 		setBounds(100, 100, 800, 550);
 		getContentPane().setLayout(null);
@@ -268,6 +269,7 @@ public class Interface extends JFrame implements ActionListener {
 		String command = e.getActionCommand();
 		
 		if (command.equals(CHERCHER)) {
+			
 			String condition = "where ";
 			if(!m_prenom.getText().equals(""))
 			{
