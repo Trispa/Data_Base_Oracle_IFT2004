@@ -281,7 +281,7 @@ public class Interface extends JFrame implements ActionListener {
 								+ evenement.m_type + ":" + evenement.m_lieu);
 					}
 				}
-				//la personne  a toujour 0 documents
+				//la personne  a toujour 0 documents //TODO
 				System.out.println("la personne a "
 						+ personne.m_listeDocuments.size() + "documents");
 				if (personne.m_listeDocuments.isEmpty())
