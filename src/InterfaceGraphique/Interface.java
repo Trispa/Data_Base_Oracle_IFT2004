@@ -326,7 +326,7 @@ public class Interface extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		afficherEvenementPersonne(m_resultat);
+		//afficherEvenementPersonne(m_resultat);
 		if (command.equals(CHERCHER)) {
 			m_resultat = m_execution.recherche(m_numero.getText(), m_prenom.getText(), m_nom.getText());
 			afficherEvenementPersonne(m_resultat);
