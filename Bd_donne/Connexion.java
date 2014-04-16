@@ -15,10 +15,10 @@ public class Connexion {
 
 	public Connexion() throws SQLException {
 
-		String login = "isbou243"; // vous pouvez écrire directement le login ici et ne
-							// pas poser la question juste après
-		String passwd = "dick!!33"; // vous pouvez écrire directement le mot de passe
-								// ici et ne pas poser la question juste après
+		String login = ""; // vous pouvez ï¿½crire directement le login ici et ne
+							// pas poser la question juste aprï¿½s
+		String passwd = ""; // vous pouvez ï¿½crire directement le mot de passe
+								// ici et ne pas poser la question juste aprï¿½s
 
 		try {
 			/**login = JOptionPane
@@ -32,10 +32,10 @@ public class Connexion {
 					.getConnection(
 							"jdbc:oracle:thin:@ift-oracle2k3.fsg.ulaval.ca:1521:ora11g",
 							login, passwd);
-			// 2-Création de la requête pour envoie de l'instruction.
+			// 2-Crï¿½ation de la requï¿½te pour envoie de l'instruction.
 			stmt = con.createStatement();
 		} catch (Exception ex) {
-			// On vérifie la présence du message anglais de login invalide.
+			// On vï¿½rifie la prï¿½sence du message anglais de login invalide.
 			if (ex.getMessage().indexOf("invalid username/password") > 0) {
 				JOptionPane
 						.showMessageDialog(null,

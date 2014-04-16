@@ -255,6 +255,10 @@ public class Interface extends JFrame implements ActionListener {
 	void afficherEvenementPersonne(Resultat resultat) {
 
 		// s'il y a juste une personne trouvée
+		if (resultat == null)
+			System.out.println("Resultat est null");
+		if (resultat.listeDesPersonnes == null)
+			System.out.println("C'Est liste qui est null");
 		if(resultat.listeDesPersonnes.isEmpty())
 		{
 			p_Evenement.setText("Aucune personne trouvées :(");
@@ -326,7 +330,7 @@ public class Interface extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		//afficherEvenementPersonne(m_resultat);
+
 		if (command.equals(CHERCHER)) {
 			m_resultat = m_execution.recherche(m_numero.getText(), m_prenom.getText(), m_nom.getText());
 			afficherEvenementPersonne(m_resultat);
