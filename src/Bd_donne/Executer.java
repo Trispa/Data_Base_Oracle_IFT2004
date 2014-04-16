@@ -109,4 +109,9 @@ public class Executer {
 		}
 		
 	}
+
+	public ResultSet recherchePrNumero(int parseInt) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -26,6 +26,7 @@ public class Resultat {
 			m_dateNaissance = dateNaisse;
 			m_listeEvenements = new ArrayList<Evenement>();
 			m_listeDocuments = new ArrayList<Document>();
+
 		}
 	
 	}
@@ -54,8 +55,13 @@ public class Resultat {
 		
 		public Document(String numero, String type, String titre, String date, String auteur)
 		{
-			
+			m_numeroDoc = numero;
+			m_type = type;
+			m_date = date;
+			m_auteur = auteur;
+			m_titre = titre;
 		}
+
 	}
 	
 	
