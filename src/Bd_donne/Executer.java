@@ -18,7 +18,7 @@ public class Executer {
 	
 	public ResultSet executeQuery(String requete) throws SQLException
 	{
-		return m_executeur.executeQuery (requete);
+		return m_executeur.executeQuery(requete);
 	}
 	public ResultSet reqPersonnes(String p_numero, String p_prenom, String p_nom) throws SQLException
 	{
@@ -46,18 +46,18 @@ public class Executer {
 	}
 	public ResultSet reqEvenement(String p_numero) throws SQLException
 	{
-		return executeQuery("select TYPE_EVENEMENT_GEN, LIEU_EVENEMENT_GEN, to_char(DATE_EVENEMENT_GEN, 'yyyy/mm/dd') from GENEALOGIE, GENEALOGIE_ACTEURS" +
+		return executeQuery("Select TYPE_EVENEMENT_GEN, LIEU_EVENEMENT_GEN, to_char(DATE_EVENEMENT_GEN, 'yyyy/mm/dd') from GENEALOGIE, GENEALOGIE_ACTEURS " +
 				"where GENEALOGIE.NO_PERSONNE ='"+p_numero + "' or (GENEALOGIE.NO_GENEALOGIE = GENEALOGIE_ACTEURS.NO_GENEALOGIE and GENEALOGIE_ACTEURS.NO_PERSONNE='" +
 				p_numero + "')");
 	}
 	public ResultSet reqDocuments(String p_numero) throws SQLException
 	{
-		return executeQuery("select NO_DOC,TYPE_DOC,TITRE_DOC, to_char(DATE_PUBLICATION_DOC, 'yyyy/mm/dd'), AUTEUR_DOC, from DOCUMENT, DOCUMENT_ACTEURS" +
+		return executeQuery("Select DOCUMENT.NO_DOC,TYPE_DOC,TITRE_DOC, to_char(DATE_PUBLICATION_DOC, 'yyyy/mm/dd'), AUTEUR_DOC from DOCUMENT, DOCUMENT_ACTEURS " +
 				"where DOCUMENT.NO_DOC = DOCUMENT_ACTEURS.NO_DOC and DOCUMENT_ACTEURS.NO_PERSONNE = '"+ p_numero + "'");
 	}
 	public ResultSet reqPersonneDansDocuments(String p_numero) throws SQLException
 	{
-		return executeQuery("select POSITION_DOC_AC, PRENOM_PER, NOM_PER from PERSONNE, DOCUMENT_ACTEURS" +
+		return executeQuery("Select POSITION_DOC_AC, PRENOM_PER, NOM_PER from PERSONNE, DOCUMENT_ACTEURS " +
 				"where DOCUMENT_ACTEURS.NO_PERSONNE = PERSONNE.NO_PERSONNE and DOCUMENT_ACTEURS.NO_DOC = '"+ p_numero + "'");
 	}
 	public Resultat recherche(String p_numero, String p_prenom, String p_nom)
@@ -65,27 +65,33 @@ public class Executer {
 		Resultat resultats = new Resultat();
 		boolean more;
 		try {
+			
 			java.sql.ResultSet rs = reqPersonnes(p_numero, p_prenom, p_nom);
+			System.out.println("Execute reqPersonnes");
 			more = rs.next();
 			
 			while(more)
 			{
+				System.out.println("Trouvé!!!!");
 				Resultat.Personne unePersonne = new Resultat.Personne(rs.getString(1),rs.getString(2), rs.getString(3), rs.getString(4));
 				java.sql.ResultSet rs1 = reqEvenement(unePersonne.m_numero);
+				System.out.println("reqEvenement a été appélé");
 				boolean more1 = rs1.next();
 				while(more1)
 				{
-					
 					Resultat.Evenement unEvent = new Resultat.Evenement(rs1.getString(1), rs1.getString(2), rs1.getString(3));
 					unePersonne.m_listeEvenements.add(unEvent);
 					more1 = rs1.next();
 				}
 				rs1 = reqDocuments(unePersonne.m_numero);
+				System.out.println("reqDocument a été appélé");
 				more1 = rs1.next();
 				while(more1)
 				{
+					System.out.println("Document trouvé!!!");
 					Resultat.Document unDocument = new Resultat.Document(rs1.getString(1), rs1.getString(2), rs1.getString(3), rs1.getString(4), rs1.getString(5));
 					java.sql.ResultSet rs2 = reqPersonneDansDocuments(unDocument.m_numeroDoc);
+					System.out.println("reqPersonneDansDocuments a été appélé");
 					boolean more2 = rs2.next();
 					while(more2)
 					{

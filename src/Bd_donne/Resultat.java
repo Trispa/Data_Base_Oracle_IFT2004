@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Resultat {
-	public ArrayList<Personne> listeDesPersonnes = new ArrayList<Personne>();
+	public ArrayList<Personne> listeDesPersonnes;
 	public Resultat()
 	{
-		
+		listeDesPersonnes = new ArrayList<Personne>();
 	}
 	public static class Personne{
 		
