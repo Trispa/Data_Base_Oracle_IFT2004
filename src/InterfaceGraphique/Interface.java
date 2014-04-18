@@ -28,7 +28,6 @@ public class Interface extends JFrame implements ActionListener {
 	 */
 	private static final long serialVersionUID = 1L;
 
-
 	private Executer m_execution;
 	private Resultat m_resultat;
 	private JTextField m_prenom;
@@ -56,9 +55,9 @@ public class Interface extends JFrame implements ActionListener {
 	private JButton btnQuitter;
 
 	public Interface(Executer executeur) throws SQLException {
-		
+
 		m_execution = executeur;
-		
+
 		setTitle("User Interface");
 		setBounds(100, 100, 800, 550);
 		getContentPane().setLayout(null);
@@ -156,7 +155,7 @@ public class Interface extends JFrame implements ActionListener {
 		JLabel lblDateDeNaissance = new JLabel("Date de Naissance");
 		lblDateDeNaissance.setBounds(12, 147, 132, 16);
 		getContentPane().add(lblDateDeNaissance);
-		
+
 		JLabel labelDate = new JLabel("");
 		labelDate.setBounds(140, 147, 56, 16);
 		getContentPane().add(labelDate);
@@ -247,79 +246,101 @@ public class Interface extends JFrame implements ActionListener {
 		m_noPersonne.setEditable(false);
 		getContentPane().add(m_noPersonne);
 		m_noPersonne.setColumns(10);
-		
-		
-		
+
 	}
 
 	void afficherEvenementPersonne(Resultat resultat) {
-
+		// tester la taille de la liste des personne trouver c'est a dire nombre
+		// de personnes trouvées
+		System.out.println("on a trouvé" + resultat.listeDesPersonnes.size());
 		// s'il y a juste une personne trouvée
 		if (resultat == null)
 			System.out.println("Resultat est null");
 		if (resultat.listeDesPersonnes == null)
 			System.out.println("C'Est liste qui est null");
-		if(resultat.listeDesPersonnes.isEmpty())
-		{
+		if (resultat.listeDesPersonnes.isEmpty()) {
 			p_Evenement.setText("Aucune personne trouvées :(");
-			 p_documents.setText("Aucune personne trouvées :(");
-		}
-		else if (resultat.listeDesPersonnes.size() == 1) {
-			if(lblDocuments.getText().equalsIgnoreCase("Documents"))
-				changerLabelDocument();
+			p_documents.setText("Aucune personne trouvées :(");
+		} else if (resultat.listeDesPersonnes.size() == 1) {
+			// restaurer le label documents
+			if (lblDocuments.getText().equalsIgnoreCase("Personnes"))
+				changerLabelDocument("Documents");
 			for (Personne personne : resultat.listeDesPersonnes) {
-				System.out.println("Personne: "+personne.m_prenom+ " "+personne.m_nom);
-				for (Evenement evenement : personne.m_listeEvenements) {
-					System.out.println(evenement.m_date + ":"
-							+ evenement.m_type + ":" + evenement.m_lieu);
-					p_Evenement.setText(evenement.m_date + ":"
-							+ evenement.m_type + ":" + evenement.m_lieu);
-					
+
+
+				if (personne.m_listeEvenements.isEmpty())
+					p_Evenement.setText("pas d'evenement pour cette personne");
+				else {
+					// tester la taille de la liste des evenement trouvé c'est a
+					// dire nombre devenement trouvés
+					System.out.println("la personne a "
+							+ personne.m_listeEvenements.size() + "Evenement");
+
+					for (Evenement evenement : personne.m_listeEvenements) {
+
+						p_Evenement.setText(evenement.m_date + ":"
+								+ evenement.m_type + ":" + evenement.m_lieu);
+					}
+
 				}
-				for (Document document : personne.m_listeDocuments){
-					 p_documents.setText(document.m_numeroDoc +":" + document.m_titre);
+				//la personne  a toujour 0 documents //TODO
+				System.out.println("la personne a "
+						+ personne.m_listeDocuments.size() + "documents");
+				if (personne.m_listeDocuments.isEmpty())
+					p_documents.setText("pas de documents pour cette personne");
+				else {
+					// tester la taille de la liste des documents trouvé c'est a
+					// dire nombre de doc trouvés
+					System.out.println("la personne a "
+							+ personne.m_listeDocuments.size() + "documents");
+					for (Document document : personne.m_listeDocuments) {
+						p_documents.setText(document.m_numeroDoc + ":"
+								+ document.m_titre);
+						System.out.println("ici");
+					}
 				}
+
 			}
-			
 
 		}
-		else
-		{
-			//changer le label Document par Personne
-			changerLabelDocument();
-			//Populer la liste trouvée
-			for(Personne personne : resultat.listeDesPersonnes)
-			{
-				p_documents.setText(personne.m_nom+", "+personne.m_dateNaissance+", "+personne.m_numero);
+		if (resultat.listeDesPersonnes.size() != 1) {
+			System.out.println("plus d'une personne");
+			// changer le label Document par Personne
+			changerLabelDocument("Personnes");
+			// Populer la liste trouvée
+			for (Personne personne : resultat.listeDesPersonnes) {
+				p_documents.setText(personne.m_nom + ", "
+						+ personne.m_dateNaissance + ", " + personne.m_numero);
 			}
-			
-			//activer le bouton Charger
+
+			// activer le bouton Charger
 			activerBouton(btnCharger);
 		}
 	}
 
-	
 	void ChagerDocumentsPersonne(Resultat resultat) {
 
+		for (Personne personne : resultat.listeDesPersonnes) {
+			p_documents.setText(personne.m_nom + ", "
+					+ personne.m_dateNaissance + ", " + personne.m_numero);
+		}
+
 	}
-	
-	//changer le label de Documents
-	void changerLabelDocument()
-	{
-		lblDocuments.setText("Personnes");
+
+	// changer le label de Documents
+	void changerLabelDocument(String label) {
+		lblDocuments.setText(label);
 	}
-	
-	//activer un bouton 
-	public void activerBouton(JButton bouton)
-	{
+
+	// activer un bouton
+	public void activerBouton(JButton bouton) {
 		bouton.setEnabled(true);
 	}
-	
-	public void desactierBouton(JButton bouton)
-	{
+
+	public void desactierBouton(JButton bouton) {
 		bouton.setEnabled(false);
 	}
-	
+
 	public void changed() {
 		if (m_prenom.getText().equals("")
 				&& (m_nom.getText().equals("") && m_numero.getText().equals("")))
@@ -332,8 +353,10 @@ public class Interface extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
+
 		if (command.equals(CHERCHER)) {
-			m_resultat = m_execution.recherche(m_numero.getText(), m_prenom.getText(), m_nom.getText());
+			m_resultat = m_execution.recherche(m_numero.getText(),
+					m_prenom.getText(), m_nom.getText());
 			afficherEvenementPersonne(m_resultat);
 		} else if (command.equals(CHARGER)) {
 			// TODO
