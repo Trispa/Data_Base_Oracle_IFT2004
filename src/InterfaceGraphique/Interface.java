@@ -268,8 +268,10 @@ public class Interface extends JFrame implements ActionListener {
 			if(lblDocuments.getText().equalsIgnoreCase("Documents"))
 				changerLabelDocument();
 			for (Personne personne : resultat.listeDesPersonnes) {
+				System.out.println("Personne: "+personne.m_prenom+ " "+personne.m_nom);
 				for (Evenement evenement : personne.m_listeEvenements) {
-
+					System.out.println(evenement.m_date + ":"
+							+ evenement.m_type + ":" + evenement.m_lieu);
 					p_Evenement.setText(evenement.m_date + ":"
 							+ evenement.m_type + ":" + evenement.m_lieu);
 					
