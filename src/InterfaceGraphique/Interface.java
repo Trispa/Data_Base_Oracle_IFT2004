@@ -53,6 +53,7 @@ public class Interface extends JFrame implements ActionListener {
 	private static String CHERCHER = "rechercher une Personne";
 	private static String CHARGER = "Charger";
 	private static String AJOUTER = "Ajouter";
+	private static String ANNULER = "Annuler";
 	private static String OK = "Valider";
 	private static String QUITTER = "Quitter l'application";
 
@@ -172,6 +173,7 @@ public class Interface extends JFrame implements ActionListener {
 		p_documents = new JList();
 		p_documents.setBounds(12, 246, 234, 262);
 		getContentPane().add(p_documents);
+	
 		
 		p_documents.addListSelectionListener(new ListSelectionListener() {
 
@@ -185,6 +187,7 @@ public class Interface extends JFrame implements ActionListener {
 		p_doc = new JTextArea();
 		p_doc.setBounds(258, 246, 239, 262);
 		getContentPane().add(p_doc);
+		p_doc.setEditable(false);
 
 		lblDocuments = new JLabel("Documents");
 		lblDocuments.setBounds(16, 218, 79, 16);
@@ -197,6 +200,7 @@ public class Interface extends JFrame implements ActionListener {
 		p_Evenement = new JTextArea();
 		p_Evenement.setBounds(258, 31, 310, 123);
 		getContentPane().add(p_Evenement);
+		p_Evenement.setEditable(false);
 
 		JLabel lblEvenements = new JLabel("Evenements");
 		lblEvenements.setBounds(258, 13, 83, 16);
@@ -416,14 +420,73 @@ public class Interface extends JFrame implements ActionListener {
 		bouton.setEnabled(true);
 	}
 
-	public void desactierBouton(JButton bouton) {
+	public void desactiverBouton(JButton bouton) {
 		bouton.setEnabled(false);
+	}
+	
+	public void activerEcritureChamp(JTextField text)
+	{
+		text.setEditable(true);
+	}
+	public void desactiverEcritureChamp(JTextField text)
+	{
+		text.setEditable(false);
+	}
+//	public void desactiverChamp(JTextField text)
+//	{
+//		text.setEnabled(false);
+//	}
+
+	public void GestionAjout()
+	{
+		activerBouton(btnOk);
+		btnAjouter.setText("Annuler");
+		btnAjouter.setActionCommand(ANNULER);
+		
+		desactiverBouton(btnCharger);
+		desactiverBouton(btnChercher);
+		desactiverBouton(btnQuitter);
+		
+		activerEcritureChamp(m_position);
+		activerEcritureChamp(m_noPersonne);
+		
+		desactiverEcritureChamp(m_nom);
+		desactiverEcritureChamp(m_prenom);
+		desactiverEcritureChamp(m_numero);
+		p_Evenement.setEnabled(false);
+		p_doc.setEditable(false);
+		p_documents.setEnabled(false);
+	
+	}
+	
+	public void Annuler()
+	{
+		desactiverBouton(btnOk);
+		btnAjouter.setText("Ajouter");
+		btnAjouter.setActionCommand(AJOUTER);
+		
+		activerBouton(btnCharger);
+		activerBouton(btnChercher);
+		activerBouton(btnQuitter);
+		
+		m_position.setText("");
+		desactiverEcritureChamp(m_position);
+		m_noPersonne.setText("");
+		desactiverEcritureChamp(m_noPersonne);
+		
+		activerEcritureChamp(m_nom);
+		activerEcritureChamp(m_prenom);
+		activerEcritureChamp(m_numero);
+		p_Evenement.setEnabled(true);
+		p_doc.setEnabled(true);
+		p_documents.setEnabled(true);
+		
 	}
 
 	public void changed() {
 		if (m_prenom.getText().equals("")
 				&& (m_nom.getText().equals("") && m_numero.getText().equals("")))
-			desactierBouton(btnChercher);
+			desactiverBouton(btnChercher);
 		else
 			activerBouton(btnChercher);
 
@@ -441,9 +504,11 @@ public class Interface extends JFrame implements ActionListener {
 		} else if (command.equals(CHARGER)) {
 			chargerDocumentsPersonne();
 		} else if (command.equals(AJOUTER)) {
-			// TODO
+			GestionAjout();	
+		} else if (command.equals(ANNULER)) {
+			Annuler();	
 		} else if (command.equals(OK)) {
-			// TODO
+			m_execution.addComentaire(m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre, m_numero.getText(),m_position.getText());
 		} else if (command.equals(QUITTER)) {
 			System.exit(0);
 		}
