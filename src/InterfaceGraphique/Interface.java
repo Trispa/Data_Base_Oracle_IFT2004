@@ -508,7 +508,7 @@ public class Interface extends JFrame implements ActionListener {
 		} else if (command.equals(ANNULER)) {
 			Annuler();	
 		} else if (command.equals(OK)) {
-			m_execution.addComentaire(m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre, m_numero.getText(),m_position.getText());
+			m_execution.addCommentaire(m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre, m_numero.getText(),m_position.getText());
 		} else if (command.equals(QUITTER)) {
 			System.exit(0);
 		}
