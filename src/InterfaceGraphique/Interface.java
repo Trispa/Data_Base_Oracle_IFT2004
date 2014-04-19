@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.swing.JLayeredPane;
 
@@ -267,17 +268,27 @@ public class Interface extends JFrame implements ActionListener {
 	}
 	void afficherNotFind()
 	{
+		init();
+		String[] vide = {"Aucune personne trouvée"};
+		p_documents.setListData(vide);
+		
+		
+	}
+	void init()
+	{
 		m_prenom.setText("");
 		m_nom.setText("");
 		m_numero.setText("");
 		m_dateNaissance.setText("");
 		p_Evenement.setText("");
-		String[] vide = {"Aucune personne trouvée"};
+		String[] vide = {""};
 		p_documents.setListData(vide);
+		p_doc.setText("");
 		entrainAfficherPersonne = false;
 		m_selectedPersonne = null;
 		m_selectedDocument = null;
-		
+		btnCharger.setEnabled(false);
+		btnAjouter.setEnabled(false);
 	}
 	void afficherSelection(javax.swing.event.ListSelectionEvent evt)
 	{
@@ -285,9 +296,12 @@ public class Interface extends JFrame implements ActionListener {
 		if(index < 0)
 			return;
 		System.out.println("La selection est : " + index);
+		System.out.println("Entrain d'afficher une personne: " + Boolean.toString(entrainAfficherPersonne));
 		if(entrainAfficherPersonne)
 		{
 			m_selectedDocument = m_selectedPersonne.m_listeDocuments.get(index);
+			btnCharger.setEnabled(true);
+			btnAjouter.setEnabled(true);
 		}
 		else
 		{
@@ -308,6 +322,8 @@ public class Interface extends JFrame implements ActionListener {
 	}
 	void afficherPersonne(Personne personne)
 	{
+		m_selectedPersonne = personne;
+		entrainAfficherPersonne = true;
 		m_prenom.setText(personne.m_prenom);
 		m_nom.setText(personne.m_nom);
 		m_numero.setText(personne.m_numero);
@@ -339,9 +355,22 @@ public class Interface extends JFrame implements ActionListener {
 	}
 	void afficherDocument(Document document)
 	{
+		String documentTexte = "";
+		documentTexte += document.m_titre + "\n";
+		documentTexte += "Date: " + document.m_date + "\n";
+		documentTexte += document.m_type.equals("ARTICLE")?"Auteur: " :"Photographe: ";
+		documentTexte += document.m_auteur + "\n";
+		for(Map.Entry<String, String> entry: document.m_mapPositionPersonne.entrySet())
+		{
+			documentTexte += "Position " + entry.getKey() + ": " + entry.getValue() + "\n";
+		}
 		
+		p_doc.setText(documentTexte);
 	}
 	void afficherEvenementPersonne(Resultat resultat) {
+		//initialiser
+		init();
+		
 		// tester la taille de la liste des personne trouver c'est a dire nombre
 		// de personnes trouvÈes
 		System.out.println("on a trouvé" + resultat.listeDesPersonnes.size());
@@ -378,6 +407,7 @@ public class Interface extends JFrame implements ActionListener {
 		{
 			afficherPersonne(m_selectedPersonne);
 			entrainAfficherPersonne = true;
+			btnCharger.setEnabled(false);
 		}
 
 	}
@@ -410,6 +440,7 @@ public class Interface extends JFrame implements ActionListener {
 			m_resultat = m_execution.recherche(m_numero.getText(),
 					m_prenom.getText(), m_nom.getText());
 			afficherEvenementPersonne(m_resultat);
+			
 		} else if (command.equals(CHARGER)) {
 			chargerDocumentsPersonne();
 		} else if (command.equals(AJOUTER)) {

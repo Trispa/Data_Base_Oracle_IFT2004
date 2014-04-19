@@ -73,18 +73,6 @@ public class Executer {
 			java.sql.ResultSet rs = reqPersonnes(p_numero, p_prenom, p_nom);
 			System.out.println("Execute reqPersonnes");
 			more = rs.next();
-			while(more)
-			{
-				i++;
-				more = rs.next();
-			
-			}
-			System.out.println("Nombre trouvŽ: "+ i);
-			
-			i = 0;
-			rs = reqPersonnes(p_numero, p_prenom, p_nom);
-			System.out.println("Execute reqPersonnes");
-			more = rs.next();
 			
 			while (more) {
 				System.out.println("Personne numero: "+ Integer.toString(++i));
@@ -94,10 +82,10 @@ public class Executer {
 				resultats.listeDesPersonnes.add(unePersonne);
 				more = rs.next();
 			}
+			
 			for(Personne unePersonne: resultats.listeDesPersonnes)
 			{
 				rs = reqEvenement(unePersonne.m_numero);
-				System.out.println("reqEvenement a été appelé");
 				more = rs.next();
 				while (more) {
 					Resultat.Evenement unEvent = new Resultat.Evenement(
@@ -106,8 +94,8 @@ public class Executer {
 					unePersonne.m_listeEvenements.add(unEvent);
 					more = rs.next();
 				}
-				rs = reqDocuments(unePersonne.m_numero);
 				
+				rs = reqDocuments(unePersonne.m_numero);
 				more = rs.next();
 				while (more) {
 					
@@ -121,9 +109,7 @@ public class Executer {
 				for(Document unDocument: unePersonne.m_listeDocuments)
 				{
 					rs = reqPersonneDansDocuments(unDocument.m_numeroDoc);
-					System.out.println("reqPersonneDansDocuments a été appelé");
 					more = rs.next();
-
 					while (more) {
 						unDocument.m_mapPositionPersonne.put(rs.getString(1),
 								rs.getString(2) + " " + rs.getString(3));
