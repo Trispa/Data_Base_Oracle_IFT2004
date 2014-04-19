@@ -59,29 +59,37 @@ public class Executer {
 		m_procedure.execute(); 
 	    return m_procedure.getInt (1);
 	}
-	public String addCommentaire(String no_doc, String titre_doc, String no_personne, String position_com) throws SQLException
-	{
-		int commentaireId = reqCommentaireId();
-		String requeteSql = "";
-		requeteSql += "Insert into COMMENTAIRES(NO_COMMENTAIRE, CODE_ABONNE,NO_DOC,DATE_COM,NO_PERSONNE,POSITION_COM) values (";
-		requeteSql += "'"+ Integer.toString(commentaireId) + "', '" + m_username + "', '" + no_doc + "', ";
-		requeteSql += "sysdate(), '" + no_personne + "', '" + position_com + "')";
-		String message;
-		try
-		{
-			executeUpdate(requeteSql);
-			java.sql.ResultSet rs = reqPersonnes(no_personne, "", "");
-			System.out.println("Execute reqPersonnes");
-			rs.next();
-			Resultat.Personne unePersonne = new Resultat.Personne(
-						rs.getString(1), rs.getString(2), rs.getString(3),
-						rs.getString(4));
-			message = "Commentaire ajouté. " + unePersonne.m_prenom + " " + unePersonne.m_nom + " est à la " + position_com + "du document " + titre_doc;
-			return message;
-		}catch(SQLException ex){
-			message = getMessageErreur(ex);
-			return message;
+	public String addCommentaire(String no_doc, String titre_doc, String no_personne, String position_com)
+	{	
+		int commentaireId;
+		try {
+			commentaireId = reqCommentaireId();
+			String requeteSql = "";
+			requeteSql += "Insert into COMMENTAIRES(NO_COMMENTAIRE, CODE_ABONNE,NO_DOC,DATE_COM,NO_PERSONNE,POSITION_COM) values (";
+			requeteSql += "'"+ Integer.toString(commentaireId) + "', '" + m_username + "', '" + no_doc + "', ";
+			requeteSql += "sysdate(), '" + no_personne + "', '" + position_com + "')";
+			String message;
+			try
+			{
+				executeUpdate(requeteSql);
+				java.sql.ResultSet rs = reqPersonnes(no_personne, "", "");
+				System.out.println("Execute reqPersonnes");
+				rs.next();
+				Resultat.Personne unePersonne = new Resultat.Personne(
+							rs.getString(1), rs.getString(2), rs.getString(3),
+							rs.getString(4));
+				message = "Commentaire ajouté. " + unePersonne.m_prenom + " " + unePersonne.m_nom + " est à la " + position_com + "du document " + titre_doc;
+				return message;
+			}catch(SQLException ex){
+				message = getMessageErreur(ex);
+				return message;
+			}
+		} catch (SQLException ex) {
+			// TODO Auto-generated catch block
+			ex.printStackTrace();
+			return getMessageErreur(ex);
 		}
+
 		
 	}
 	
