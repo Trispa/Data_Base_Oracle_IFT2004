@@ -8,6 +8,7 @@ public class Connexion {
 
 	private boolean acceOK = true;
 	public Statement stmt;
+	public CallableStatement callableStmt;
 
 	public boolean getAcceOK() {
 		return this.acceOK;
@@ -34,6 +35,12 @@ public class Connexion {
 							login, passwd);
 			// 2-Cr�ation de la requ�te pour envoie de l'instruction.
 			stmt = con.createStatement();
+			callableStmt = con.prepareCall("{? = call FCT_NOUVEAU_NO_COMMENTAIRE (?)}");
+			callableStmt.registerOutParameter (1, Types.INTEGER);
+		    callableStmt.setString(2,aa);       
+		     
+		    stmt.execute(); 
+		    int output =stmt.getInt (1);
 		} catch (Exception ex) {
 			// On v�rifie la pr�sence du message anglais de login invalide.
 			if (ex.getMessage().indexOf("invalid username/password") > 0) {

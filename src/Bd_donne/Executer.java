@@ -1,5 +1,6 @@
 package Bd_donne;
 
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,14 +11,25 @@ import Bd_donne.Resultat.Personne;
 public class Executer {
 
 	private static Statement m_executeur;
+	private static CallableStatement m_procedure;
+	private static String m_username;
 
-	public Executer(Statement executeur) {
+	public Executer(Statement executeur, CallableStatement procedure, String username) {
 		m_executeur = executeur;
+		m_procedure = procedure;
+		m_username = username;
 
 	}
-
-	public ResultSet executeQuery(String requete) throws SQLException {
+	public String getMessageErreur(SQLException ex)
+	{
+		return ex.getMessage();
+	}
+	
+	private ResultSet executeQuery(String requete) throws SQLException {
 		return m_executeur.executeQuery(requete);
+	}
+	private int executeUpdate(String requete) throws SQLException {
+		return m_executeur.executeUpdate(requete);
 	}
 
 	public ResultSet reqPersonnes(String p_numero, String p_prenom, String p_nom)
@@ -42,10 +54,40 @@ public class Executer {
 		System.out.println(requete_sql);
 		return executeQuery(requete_sql);
 	}
-
+	public int reqCommentaireId() throws SQLException
+	{
+		m_procedure.execute(); 
+	    return m_procedure.getInt (1);
+	}
+	public String addCommentaire(String code_abonne, String no_doc, String titre_doc,  String date_com, String no_personne, String position_com) throws SQLException
+	{
+		int commentaireId = reqCommentaireId();
+		String requeteSql = "";
+		requeteSql += "Insert into COMMENTAIRES(NO_COMMENTAIRE, CODE_ABONNE,NO_DOC,DATE_COM,NO_PERSONNE,POSITION_COM) values (";
+		requeteSql += "'"+ Integer.toString(commentaireId) + "', '" + m_username + "', '" + no_doc + "', ";
+		requeteSql += "to_date('" + date_com + "'YYYY/MM/DD'), '" + no_personne + "', '" + position_com + "')";
+		String message;
+		try
+		{
+			executeUpdate(requeteSql);
+			java.sql.ResultSet rs = reqPersonnes(no_personne, "", "");
+			System.out.println("Execute reqPersonnes");
+			rs.next();
+			Resultat.Personne unePersonne = new Resultat.Personne(
+						rs.getString(1), rs.getString(2), rs.getString(3),
+						rs.getString(4));
+			message = "Commentaire ajouté. " + unePersonne.m_prenom + " " + unePersonne.m_nom + " est à la " + position_com + "du document " + titre_doc;
+			return message;
+		}catch(SQLException ex){
+			message = getMessageErreur(ex);
+			return message;
+		}
+		
+	}
+	
 	public ResultSet reqEvenement(String p_numero) throws SQLException {
 		
-		return executeQuery("Select TYPE_EVENEMENT_GEN, LIEU_EVENEMENT_GEN, to_char(DATE_EVENEMENT_GEN, 'yyyy/mm/dd') from GENEALOGIE, GENEALOGIE_ACTEURS "
+		return executeQuery("Select distinct TYPE_EVENEMENT_GEN, LIEU_EVENEMENT_GEN, to_char(DATE_EVENEMENT_GEN, 'yyyy/mm/dd') from GENEALOGIE, GENEALOGIE_ACTEURS "
 				+ "where GENEALOGIE.NO_PERSONNE ='"
 				+ p_numero
 				+ "' or (GENEALOGIE.NO_GENEALOGIE = GENEALOGIE_ACTEURS.NO_GENEALOGIE and GENEALOGIE_ACTEURS.NO_PERSONNE='"

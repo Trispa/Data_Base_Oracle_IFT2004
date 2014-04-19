@@ -72,7 +72,7 @@ public class Interface extends JFrame implements ActionListener {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		JLabel lblPersonne = new JLabel("Personne");
-		lblPersonne.setBounds(12, 13, 56, 16);
+		lblPersonne.setBounds(12, 13, 83, 16);
 		getContentPane().add(lblPersonne);
 
 		JLabel lblPrnom = new JLabel("Pr\u00E9nom");
@@ -183,7 +183,7 @@ public class Interface extends JFrame implements ActionListener {
         });
 
 		p_doc = new JTextArea();
-		p_doc.setBounds(258, 246, 231, 262);
+		p_doc.setBounds(258, 246, 239, 262);
 		getContentPane().add(p_doc);
 
 		lblDocuments = new JLabel("Documents");
@@ -370,8 +370,6 @@ public class Interface extends JFrame implements ActionListener {
 		//initialiser
 		init();
 		
-		// tester la taille de la liste des personne trouver c'est a dire nombre
-		// de personnes trouvées
 		System.out.println("on a trouvŽ" + resultat.listeDesPersonnes.size());
 		// s'il y a juste une personne trouvée
 		if (resultat.listeDesPersonnes == null)
@@ -384,13 +382,13 @@ public class Interface extends JFrame implements ActionListener {
 		
 		else if (resultat.listeDesPersonnes.size() == 1) {
 			
-			lblDocument.setText("Documents");
+			lblDocuments.setText("Documents");
 			afficherPersonne(resultat.listeDesPersonnes.get(0));
 			btnCharger.setEnabled(false);
 		}
 		else
 		{
-			lblDocument.setText("Personnes");
+			lblDocuments.setText("Personnes");
 			afficherListePersonnes(resultat.listeDesPersonnes);
 			btnCharger.setEnabled(true);
 		}
