@@ -44,6 +44,7 @@ public class Executer {
 	}
 
 	public ResultSet reqEvenement(String p_numero) throws SQLException {
+		
 		return executeQuery("Select TYPE_EVENEMENT_GEN, LIEU_EVENEMENT_GEN, to_char(DATE_EVENEMENT_GEN, 'yyyy/mm/dd') from GENEALOGIE, GENEALOGIE_ACTEURS "
 				+ "where GENEALOGIE.NO_PERSONNE ='"
 				+ p_numero

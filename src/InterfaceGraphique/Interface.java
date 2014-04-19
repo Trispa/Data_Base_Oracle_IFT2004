@@ -11,7 +11,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Bd_donne.Connexion;
+
 import Bd_donne.Executer;
 import Bd_donne.Resultat;
 import Bd_donne.Resultat.Document;
@@ -19,8 +19,7 @@ import Bd_donne.Resultat.Evenement;
 import Bd_donne.Resultat.Personne;
 
 import java.awt.event.*;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -184,7 +183,7 @@ public class Interface extends JFrame implements ActionListener {
         });
 
 		p_doc = new JTextArea();
-		p_doc.setBounds(272, 246, 208, 262);
+		p_doc.setBounds(258, 246, 231, 262);
 		getContentPane().add(p_doc);
 
 		lblDocuments = new JLabel("Documents");
@@ -192,7 +191,7 @@ public class Interface extends JFrame implements ActionListener {
 		getContentPane().add(lblDocuments);
 
 		lblDocument = new JLabel("Document");
-		lblDocument.setBounds(276, 218, 106, 16);
+		lblDocument.setBounds(258, 218, 106, 16);
 		getContentPane().add(lblDocument);
 
 		p_Evenement = new JTextArea();
