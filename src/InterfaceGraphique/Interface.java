@@ -509,11 +509,13 @@ public class Interface extends JFrame implements ActionListener {
 		} else if (command.equals(ANNULER)) {
 			Annuler();	
 		} else if (command.equals(OK)) {
+
 			String message = m_execution.addCommentaire(m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre, m_noPersonne.getText(),m_position.getText());
 			JOptionPane
 			.showMessageDialog(null,
 					message);
 			
+
 		} else if (command.equals(QUITTER)) {
 			System.exit(0);
 		}

@@ -22,9 +22,14 @@ public class Executer {
 
 	}
 
-	public String getMessageErreur(SQLException ex) {
-		
-		
+	public String getMessageErreur(SQLException ex)
+	{
+		if(ex.getMessage().indexOf("violation de contrainte") > 0)
+		{
+			return "Impossible d'ajouter le commentaire. Vérifiez que le numéro personne entré existe bien ou que votre nom d'utilisateur existe bien comme abonné.";
+					
+		}
+
 		return ex.getMessage();
 	}
 
