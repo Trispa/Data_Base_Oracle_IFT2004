@@ -66,9 +66,9 @@ public class Connexion {
 								"jdbc:oracle:thin:@ift-oracle2k3.fsg.ulaval.ca:1521:ora11g",
 								login, passwd);
 				stmt = con.createStatement();
-				callableStmt = con.prepareCall("{? = call FCT_NOUVEAU_NO_COMMENTAIRE (?)}");
+				callableStmt = con.prepareCall("{? = call FCT_NOUVEAU_NO_COMMENTAIRE ()}");
 				callableStmt.registerOutParameter (1, Types.INTEGER);
-			    callableStmt.setString(2,"Didia");   
+			    //callableStmt.setString(2,"Didia");   
 			    username = login;
 				return true;
 			} catch (Exception ex) {

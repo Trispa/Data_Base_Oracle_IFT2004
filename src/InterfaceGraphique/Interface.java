@@ -3,6 +3,7 @@ package InterfaceGraphique;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
@@ -12,6 +13,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 
+
 import Bd_donne.Executer;
 import Bd_donne.Resultat;
 import Bd_donne.Resultat.Document;
@@ -19,7 +21,6 @@ import Bd_donne.Resultat.Evenement;
 import Bd_donne.Resultat.Personne;
 
 import java.awt.event.*;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -365,7 +366,7 @@ public class Interface extends JFrame implements ActionListener {
 		documentTexte += document.m_auteur + "\n";
 		for(Map.Entry<String, String> entry: document.m_mapPositionPersonne.entrySet())
 		{
-			documentTexte += "Position " + entry.getKey() + ": " + entry.getValue() + "\n";
+			documentTexte += entry.getKey() + ": " + entry.getValue() + "\n";
 		}
 		
 		p_doc.setText(documentTexte);
@@ -508,7 +509,11 @@ public class Interface extends JFrame implements ActionListener {
 		} else if (command.equals(ANNULER)) {
 			Annuler();	
 		} else if (command.equals(OK)) {
-			m_execution.addComentaire(m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre, m_numero.getText(),m_position.getText());
+			String message = m_execution.addCommentaire(m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre, m_noPersonne.getText(),m_position.getText());
+			JOptionPane
+			.showMessageDialog(null,
+					message);
+			
 		} else if (command.equals(QUITTER)) {
 			System.exit(0);
 		}
