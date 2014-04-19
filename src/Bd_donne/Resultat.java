@@ -60,6 +60,7 @@ public class Resultat {
 			m_date = date;
 			m_auteur = auteur;
 			m_titre = titre;
+			m_mapPositionPersonne = new HashMap<String, String>();
 		}
 
 	}

@@ -294,10 +294,12 @@ public class Interface extends JFrame implements ActionListener {
 			        //les requêtes SQL DML qui retournent des données
 				java.sql.ResultSet rs = stmt.executeQuery (requete_sql);
 				
+				
 				  //Obtention des méta-données de la table
 				  //Soit nom et type des colonnes
 				
 				java.sql.ResultSetMetaData rsmd = rs.getMetaData();
+			
 				  //Le nombre de colonnes
 				  int numCols = rsmd.getColumnCount();
 				  //Au départ, le rs est positionné avant le début

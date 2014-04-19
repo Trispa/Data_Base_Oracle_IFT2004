@@ -2,11 +2,14 @@ package InterfaceGraphique;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import Bd_donne.Connexion;
 import Bd_donne.Executer;
@@ -19,6 +22,8 @@ import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import javax.swing.JLayeredPane;
 
 public class Interface extends JFrame implements ActionListener {
@@ -35,9 +40,12 @@ public class Interface extends JFrame implements ActionListener {
 	private JTextField m_numero;
 	private JTextField m_position;
 	private JTextField m_noPersonne;
-
+	private JLabel m_dateNaissance;
+	private Personne m_selectedPersonne;
+	private Document m_selectedDocument;
+	private boolean entrainAfficherPersonne = false;
 	private JTextArea p_Evenement;
-	private JTextArea p_documents;
+	private JList p_documents;
 	private JTextArea p_doc;
 	private JLabel lblDocuments;
 	private JLabel lblDocument;
@@ -152,29 +160,38 @@ public class Interface extends JFrame implements ActionListener {
 			}
 		});
 
-		JLabel lblDateDeNaissance = new JLabel("Date de Naissance");
-		lblDateDeNaissance.setBounds(12, 147, 132, 16);
+		JLabel lblDateDeNaissance = new JLabel("Date de Naissance:");
+		lblDateDeNaissance.setBounds(12, 147, 127, 16);
 		getContentPane().add(lblDateDeNaissance);
 
-		JLabel labelDate = new JLabel("");
-		labelDate.setBounds(140, 147, 56, 16);
-		getContentPane().add(labelDate);
-		labelDate.setText("ma date de naissance");
+		m_dateNaissance = new JLabel("");
+		m_dateNaissance.setBounds(140, 147, 106, 16);
+		getContentPane().add(m_dateNaissance);
+		
 
-		p_documents = new JTextArea();
-		p_documents.setBounds(12, 246, 201, 209);
+		p_documents = new JList();
+		p_documents.setBounds(12, 246, 234, 262);
 		getContentPane().add(p_documents);
+		
+		p_documents.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent evt) {
+				afficherSelection(evt);
+				
+			}
+        });
 
 		p_doc = new JTextArea();
-		p_doc.setBounds(272, 246, 176, 209);
+		p_doc.setBounds(272, 246, 208, 262);
 		getContentPane().add(p_doc);
 
 		lblDocuments = new JLabel("Documents");
-		lblDocuments.setBounds(12, 231, 79, 16);
+		lblDocuments.setBounds(16, 218, 79, 16);
 		getContentPane().add(lblDocuments);
 
 		lblDocument = new JLabel("Document");
-		lblDocument.setBounds(272, 231, 69, 16);
+		lblDocument.setBounds(276, 218, 106, 16);
 		getContentPane().add(lblDocument);
 
 		p_Evenement = new JTextArea();
@@ -227,110 +244,145 @@ public class Interface extends JFrame implements ActionListener {
 
 		// position de la personne
 		JLabel lblPosition = new JLabel("Position");
-		lblPosition.setBounds(460, 305, 56, 16);
+		lblPosition.setBounds(520, 279, 56, 16);
 		getContentPane().add(lblPosition);
 
 		m_position = new JTextField();
-		m_position.setBounds(460, 334, 116, 22);
+		m_position.setBounds(501, 309, 116, 22);
 		m_position.setEditable(false);
 		getContentPane().add(m_position);
 		m_position.setColumns(10);
 
 		// numero de la personne
 		JLabel lblNoDePersonne = new JLabel("No de personne");
-		lblNoDePersonne.setBounds(460, 369, 116, 16);
+		lblNoDePersonne.setBounds(511, 354, 116, 16);
 		getContentPane().add(lblNoDePersonne);
 
 		m_noPersonne = new JTextField();
-		m_noPersonne.setBounds(460, 408, 116, 22);
+		m_noPersonne.setBounds(501, 383, 116, 22);
 		m_noPersonne.setEditable(false);
 		getContentPane().add(m_noPersonne);
 		m_noPersonne.setColumns(10);
 
 	}
-
+	void afficherNotFind()
+	{
+		m_prenom.setText("");
+		m_nom.setText("");
+		m_numero.setText("");
+		m_dateNaissance.setText("");
+		p_Evenement.setText("");
+		String[] vide = {"Aucune personne trouvée"};
+		p_documents.setListData(vide);
+		entrainAfficherPersonne = false;
+		m_selectedPersonne = null;
+		m_selectedDocument = null;
+		
+	}
+	void afficherSelection(javax.swing.event.ListSelectionEvent evt)
+	{
+		int index = p_documents.getSelectedIndex();
+		if(index < 0)
+			return;
+		System.out.println("La selection est : " + index);
+		if(entrainAfficherPersonne)
+		{
+			m_selectedDocument = m_selectedPersonne.m_listeDocuments.get(index);
+		}
+		else
+		{
+			m_selectedPersonne = m_resultat.listeDesPersonnes.get(index);
+			
+		}
+		
+	}
+	void afficherListePersonnes(ArrayList<Personne> listePersonnes)
+	{
+		String[] vecteursDocuments = new String[listePersonnes.size()];
+		for(int i = 0; i<listePersonnes.size(); i++)
+		{
+			vecteursDocuments[i] = listePersonnes.get(i).m_numero + ": " + listePersonnes.get(i).m_prenom + " " + listePersonnes.get(i).m_nom +
+					" - " + listePersonnes.get(i).m_dateNaissance + "\n";
+		}
+		p_documents.setListData(vecteursDocuments);
+	}
+	void afficherPersonne(Personne personne)
+	{
+		m_prenom.setText(personne.m_prenom);
+		m_nom.setText(personne.m_nom);
+		m_numero.setText(personne.m_numero);
+		m_dateNaissance.setText(personne.m_dateNaissance);
+		afficherEvenements(personne.m_listeEvenements);
+		afficherListeDocuments(personne.m_listeDocuments);
+	}
+	void afficherEvenements(ArrayList<Evenement> listeEvenements)
+	{
+		if(listeEvenements.isEmpty())
+		{
+			System.out.println("La liste des evenements est vide");
+		}
+		String texteEvenement = "";
+		for(Evenement event:listeEvenements)
+		{
+			texteEvenement += event.m_date + ": " + event.m_type + " - "+ event.m_lieu + "\n";
+		}
+		p_Evenement.setText(texteEvenement);
+	}
+	void afficherListeDocuments(ArrayList<Document> listeDocuments)
+	{
+		String[] vecteursDocuments = new String[listeDocuments.size()];
+		for(int i = 0; i<listeDocuments.size(); i++)
+		{
+			vecteursDocuments[i] = listeDocuments.get(i).m_numeroDoc + ": " + listeDocuments.get(i).m_titre + "\n";
+		}
+		p_documents.setListData(vecteursDocuments);
+	}
+	void afficherDocument(Document document)
+	{
+		
+	}
 	void afficherEvenementPersonne(Resultat resultat) {
 		// tester la taille de la liste des personne trouver c'est a dire nombre
 		// de personnes trouvÈes
-		System.out.println("on a trouvÈ" + resultat.listeDesPersonnes.size());
+		System.out.println("on a trouvé" + resultat.listeDesPersonnes.size());
 		// s'il y a juste une personne trouvÈe
-		if (resultat == null)
-			System.out.println("Resultat est null");
 		if (resultat.listeDesPersonnes == null)
 			System.out.println("C'Est liste qui est null");
 		if (resultat.listeDesPersonnes.isEmpty()) {
-			p_Evenement.setText("Aucune personne trouvÈes :(");
-			p_documents.setText("Aucune personne trouvÈes :(");
-		} else if (resultat.listeDesPersonnes.size() == 1) {
-			// restaurer le label documents
-			if (lblDocuments.getText().equalsIgnoreCase("Personnes"))
-				changerLabelDocument("Documents");
-			for (Personne personne : resultat.listeDesPersonnes) {
-
-
-				if (personne.m_listeEvenements.isEmpty())
-					p_Evenement.setText("pas d'evenement pour cette personne");
-				else {
-					// tester la taille de la liste des evenement trouvÈ c'est a
-					// dire nombre devenement trouvÈs
-					System.out.println("la personne a "
-							+ personne.m_listeEvenements.size() + "Evenement");
-
-					for (Evenement evenement : personne.m_listeEvenements) {
-
-						p_Evenement.setText(evenement.m_date + ":"
-								+ evenement.m_type + ":" + evenement.m_lieu);
-					}
-
-				}
-				//la personne  a toujour 0 documents //TODO
-				System.out.println("la personne a "
-						+ personne.m_listeDocuments.size() + "documents");
-				if (personne.m_listeDocuments.isEmpty())
-					p_documents.setText("pas de documents pour cette personne");
-				else {
-					// tester la taille de la liste des documents trouvÈ c'est a
-					// dire nombre de doc trouvÈs
-					System.out.println("la personne a "
-							+ personne.m_listeDocuments.size() + "documents");
-					for (Document document : personne.m_listeDocuments) {
-						p_documents.setText(document.m_numeroDoc + ":"
-								+ document.m_titre);
-						System.out.println("ici");
-					}
-				}
-
-			}
-
+			afficherNotFind();
+			
+			
+		} 
+		
+		else if (resultat.listeDesPersonnes.size() == 1) {
+			
+			lblDocument.setText("Documents");
+			afficherPersonne(resultat.listeDesPersonnes.get(0));
+			btnCharger.setEnabled(false);
 		}
-		if (resultat.listeDesPersonnes.size() != 1) {
-			System.out.println("plus d'une personne");
-			// changer le label Document par Personne
-			changerLabelDocument("Personnes");
-			// Populer la liste trouvÈe
-			for (Personne personne : resultat.listeDesPersonnes) {
-				p_documents.setText(personne.m_nom + ", "
-						+ personne.m_dateNaissance + ", " + personne.m_numero);
-			}
-
-			// activer le bouton Charger
-			activerBouton(btnCharger);
-		}
-	}
-
-	void ChagerDocumentsPersonne(Resultat resultat) {
-
-		for (Personne personne : resultat.listeDesPersonnes) {
-			p_documents.setText(personne.m_nom + ", "
-					+ personne.m_dateNaissance + ", " + personne.m_numero);
+		else
+		{
+			lblDocument.setText("Personnes");
+			afficherListePersonnes(resultat.listeDesPersonnes);
+			btnCharger.setEnabled(true);
 		}
 
 	}
 
-	// changer le label de Documents
-	void changerLabelDocument(String label) {
-		lblDocuments.setText(label);
+	void chargerDocumentsPersonne() {
+		if(entrainAfficherPersonne)
+		{
+			afficherDocument(m_selectedDocument);
+		}
+		else
+		{
+			afficherPersonne(m_selectedPersonne);
+			entrainAfficherPersonne = true;
+		}
+
 	}
+
+
 
 	// activer un bouton
 	public void activerBouton(JButton bouton) {
@@ -359,7 +411,7 @@ public class Interface extends JFrame implements ActionListener {
 					m_prenom.getText(), m_nom.getText());
 			afficherEvenementPersonne(m_resultat);
 		} else if (command.equals(CHARGER)) {
-			// TODO
+			chargerDocumentsPersonne();
 		} else if (command.equals(AJOUTER)) {
 			// TODO
 		} else if (command.equals(OK)) {

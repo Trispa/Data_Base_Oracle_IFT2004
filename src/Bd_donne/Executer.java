@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Bd_donne.Resultat.Document;
+import Bd_donne.Resultat.Personne;
+
 public class Executer {
 
 	private static Statement m_executeur;
@@ -36,6 +39,7 @@ public class Executer {
 
 		String requete_sql = "Select NO_PERSONNE, NOM_PER, PRENOM_PER, to_char(DATE_NAISSANCE_PER, 'yyyy/mm/dd') from PERSONNE "
 				+ condition;
+		System.out.println(requete_sql);
 		return executeQuery(requete_sql);
 	}
 
@@ -55,6 +59,7 @@ public class Executer {
 
 	public ResultSet reqPersonneDansDocuments(String p_numero)
 			throws SQLException {
+		
 		return executeQuery("Select POSITION_DOC_AC, PRENOM_PER, NOM_PER from PERSONNE, DOCUMENT_ACTEURS "
 				+ "where DOCUMENT_ACTEURS.NO_PERSONNE = PERSONNE.NO_PERSONNE and DOCUMENT_ACTEURS.NO_DOC = '"
 				+ p_numero + "'");
@@ -64,50 +69,69 @@ public class Executer {
 		Resultat resultats = new Resultat();
 		boolean more;
 		try {
-
+			int i = 0;
 			java.sql.ResultSet rs = reqPersonnes(p_numero, p_prenom, p_nom);
 			System.out.println("Execute reqPersonnes");
 			more = rs.next();
-
+			while(more)
+			{
+				i++;
+				more = rs.next();
+			
+			}
+			System.out.println("Nombre trouvŽ: "+ i);
+			
+			i = 0;
+			rs = reqPersonnes(p_numero, p_prenom, p_nom);
+			System.out.println("Execute reqPersonnes");
+			more = rs.next();
+			
 			while (more) {
-				System.out.println("Trouvé!!!!");
+				System.out.println("Personne numero: "+ Integer.toString(++i));
 				Resultat.Personne unePersonne = new Resultat.Personne(
 						rs.getString(1), rs.getString(2), rs.getString(3),
 						rs.getString(4));
-				java.sql.ResultSet rs1 = reqEvenement(unePersonne.m_numero);
-				System.out.println("reqEvenement a été appelé");
-				boolean more1 = rs1.next();
-				while (more1) {
-					Resultat.Evenement unEvent = new Resultat.Evenement(
-							rs1.getString(1), rs1.getString(2),
-							rs1.getString(3));
-					unePersonne.m_listeEvenements.add(unEvent);
-					more1 = rs1.next();
-				}
-				rs1 = reqDocuments(unePersonne.m_numero);
-				System.out.println("reqDocument a été appelé");
-				more1 = rs1.next();
-				while (more1) {
-					System.out.println("Document trouvé!!!");
-					Resultat.Document unDocument = new Resultat.Document(
-							rs1.getString(1), rs1.getString(2),
-							rs1.getString(3), rs1.getString(4),
-							rs1.getString(5));
-					java.sql.ResultSet rs2 = reqPersonneDansDocuments(unDocument.m_numeroDoc);
-					System.out.println("reqPersonneDansDocuments a été appelé");
-					boolean more2 = rs2.next();
-
-					while (more2) {
-						unDocument.m_mapPositionPersonne.put(rs2.getString(1),
-								rs2.getString(2) + " " + rs2.getString(3));
-						more2 = rs2.next();
-					}
-					unePersonne.m_listeDocuments.add(unDocument);
-					more1 = rs1.next();
-				}
 				resultats.listeDesPersonnes.add(unePersonne);
 				more = rs.next();
+			}
+			for(Personne unePersonne: resultats.listeDesPersonnes)
+			{
+				rs = reqEvenement(unePersonne.m_numero);
+				System.out.println("reqEvenement a été appelé");
+				more = rs.next();
+				while (more) {
+					Resultat.Evenement unEvent = new Resultat.Evenement(
+							rs.getString(1), rs.getString(2),
+							rs.getString(3));
+					unePersonne.m_listeEvenements.add(unEvent);
+					more = rs.next();
+				}
+				rs = reqDocuments(unePersonne.m_numero);
+				
+				more = rs.next();
+				while (more) {
+					
+					Resultat.Document unDocument = new Resultat.Document(
+							rs.getString(1), rs.getString(2),
+							rs.getString(3), rs.getString(4),
+							rs.getString(5));
+					unePersonne.m_listeDocuments.add(unDocument);
+					more = rs.next();
+				}
+				for(Document unDocument: unePersonne.m_listeDocuments)
+				{
+					rs = reqPersonneDansDocuments(unDocument.m_numeroDoc);
+					System.out.println("reqPersonneDansDocuments a été appelé");
+					more = rs.next();
 
+					while (more) {
+						unDocument.m_mapPositionPersonne.put(rs.getString(1),
+								rs.getString(2) + " " + rs.getString(3));
+						more = rs.next();
+					}
+					
+				}
+			
 			}
 
 			return resultats;
