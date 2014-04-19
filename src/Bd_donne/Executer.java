@@ -59,13 +59,13 @@ public class Executer {
 		m_procedure.execute(); 
 	    return m_procedure.getInt (1);
 	}
-	public String addCommentaire(String code_abonne, String no_doc, String titre_doc,  String date_com, String no_personne, String position_com) throws SQLException
+	public String addCommentaire(String no_doc, String titre_doc, String no_personne, String position_com) throws SQLException
 	{
 		int commentaireId = reqCommentaireId();
 		String requeteSql = "";
 		requeteSql += "Insert into COMMENTAIRES(NO_COMMENTAIRE, CODE_ABONNE,NO_DOC,DATE_COM,NO_PERSONNE,POSITION_COM) values (";
 		requeteSql += "'"+ Integer.toString(commentaireId) + "', '" + m_username + "', '" + no_doc + "', ";
-		requeteSql += "to_date('" + date_com + "'YYYY/MM/DD'), '" + no_personne + "', '" + position_com + "')";
+		requeteSql += "sysdate(), '" + no_personne + "', '" + position_com + "')";
 		String message;
 		try
 		{
