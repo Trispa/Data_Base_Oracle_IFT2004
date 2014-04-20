@@ -12,8 +12,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
-
 import Bd_donne.Executer;
 import Bd_donne.Resultat;
 import Bd_donne.Resultat.Document;
@@ -69,7 +67,7 @@ public class Interface extends JFrame implements ActionListener {
 		m_execution = executeur;
 
 		setTitle("User Interface");
-		setBounds(100, 100, 800, 550);
+		setBounds(100, 100, 800, 570);
 		getContentPane().setLayout(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -169,21 +167,19 @@ public class Interface extends JFrame implements ActionListener {
 		m_dateNaissance = new JLabel("");
 		m_dateNaissance.setBounds(140, 147, 106, 16);
 		getContentPane().add(m_dateNaissance);
-		
 
 		p_documents = new JList();
 		p_documents.setBounds(12, 246, 234, 262);
 		getContentPane().add(p_documents);
-	
-		
+
 		p_documents.addListSelectionListener(new ListSelectionListener() {
 
 			@Override
 			public void valueChanged(ListSelectionEvent evt) {
 				afficherSelection(evt);
-				
+
 			}
-        });
+		});
 
 		p_doc = new JTextArea();
 		p_doc.setBounds(258, 246, 239, 262);
@@ -270,22 +266,21 @@ public class Interface extends JFrame implements ActionListener {
 		m_noPersonne.setColumns(10);
 
 	}
-	void afficherNotFind()
-	{
+
+	void afficherNotFind() {
 		init();
-		String[] vide = {"Aucune personne trouvŽe"};
+		String[] vide = { "Aucune personne trouvŽe" };
 		p_documents.setListData(vide);
-		
-		
+
 	}
-	void init()
-	{
+
+	void init() {
 		m_prenom.setText("");
 		m_nom.setText("");
 		m_numero.setText("");
 		m_dateNaissance.setText("");
 		p_Evenement.setText("");
-		String[] vide = {""};
+		String[] vide = { "" };
 		p_documents.setListData(vide);
 		p_doc.setText("");
 		entrainAfficherPersonne = false;
@@ -294,38 +289,37 @@ public class Interface extends JFrame implements ActionListener {
 		btnCharger.setEnabled(false);
 		btnAjouter.setEnabled(false);
 	}
-	void afficherSelection(javax.swing.event.ListSelectionEvent evt)
-	{
+
+	void afficherSelection(javax.swing.event.ListSelectionEvent evt) {
 		int index = p_documents.getSelectedIndex();
-		if(index < 0)
+		if (index < 0)
 			return;
 		System.out.println("La selection est : " + index);
-		System.out.println("Entrain d'afficher une personne: " + Boolean.toString(entrainAfficherPersonne));
-		if(entrainAfficherPersonne)
-		{
+		System.out.println("Entrain d'afficher une personne: "
+				+ Boolean.toString(entrainAfficherPersonne));
+		if (entrainAfficherPersonne) {
 			m_selectedDocument = m_selectedPersonne.m_listeDocuments.get(index);
 			btnCharger.setEnabled(true);
 			btnAjouter.setEnabled(true);
-		}
-		else
-		{
+		} else {
 			m_selectedPersonne = m_resultat.listeDesPersonnes.get(index);
-			
+
 		}
-		
+
 	}
-	void afficherListePersonnes(ArrayList<Personne> listePersonnes)
-	{
+
+	void afficherListePersonnes(ArrayList<Personne> listePersonnes) {
 		String[] vecteursDocuments = new String[listePersonnes.size()];
-		for(int i = 0; i<listePersonnes.size(); i++)
-		{
-			vecteursDocuments[i] = listePersonnes.get(i).m_numero + ": " + listePersonnes.get(i).m_prenom + " " + listePersonnes.get(i).m_nom +
-					" - " + listePersonnes.get(i).m_dateNaissance + "\n";
+		for (int i = 0; i < listePersonnes.size(); i++) {
+			vecteursDocuments[i] = listePersonnes.get(i).m_numero + ": "
+					+ listePersonnes.get(i).m_prenom + " "
+					+ listePersonnes.get(i).m_nom + " - "
+					+ listePersonnes.get(i).m_dateNaissance + "\n";
 		}
 		p_documents.setListData(vecteursDocuments);
 	}
-	void afficherPersonne(Personne personne)
-	{
+
+	void afficherPersonne(Personne personne) {
 		m_selectedPersonne = personne;
 		entrainAfficherPersonne = true;
 		m_prenom.setText(personne.m_prenom);
@@ -335,64 +329,62 @@ public class Interface extends JFrame implements ActionListener {
 		afficherEvenements(personne.m_listeEvenements);
 		afficherListeDocuments(personne.m_listeDocuments);
 	}
-	void afficherEvenements(ArrayList<Evenement> listeEvenements)
-	{
-		if(listeEvenements.isEmpty())
-		{
+
+	void afficherEvenements(ArrayList<Evenement> listeEvenements) {
+		if (listeEvenements.isEmpty()) {
 			System.out.println("La liste des evenements est vide");
 		}
 		String texteEvenement = "";
-		for(Evenement event:listeEvenements)
-		{
-			texteEvenement += event.m_date + ": " + event.m_type + " - "+ event.m_lieu + "\n";
+		for (Evenement event : listeEvenements) {
+			texteEvenement += event.m_date + ": " + event.m_type + " - "
+					+ event.m_lieu + "\n";
 		}
 		p_Evenement.setText(texteEvenement);
 	}
-	void afficherListeDocuments(ArrayList<Document> listeDocuments)
-	{
+
+	void afficherListeDocuments(ArrayList<Document> listeDocuments) {
 		String[] vecteursDocuments = new String[listeDocuments.size()];
-		for(int i = 0; i<listeDocuments.size(); i++)
-		{
-			vecteursDocuments[i] = listeDocuments.get(i).m_numeroDoc + ": " + listeDocuments.get(i).m_titre + "\n";
+		for (int i = 0; i < listeDocuments.size(); i++) {
+			vecteursDocuments[i] = listeDocuments.get(i).m_numeroDoc + ": "
+					+ listeDocuments.get(i).m_titre + "\n";
 		}
 		p_documents.setListData(vecteursDocuments);
 	}
-	void afficherDocument(Document document)
-	{
+
+	void afficherDocument(Document document) {
 		String documentTexte = "";
 		documentTexte += document.m_titre + "\n";
 		documentTexte += "Date: " + document.m_date + "\n";
-		documentTexte += document.m_type.equals("ARTICLE")?"Auteur: " :"Photographe: ";
+		documentTexte += document.m_type.equals("ARTICLE") ? "Auteur: "
+				: "Photographe: ";
 		documentTexte += document.m_auteur + "\n";
-		for(Map.Entry<String, String> entry: document.m_mapPositionPersonne.entrySet())
-		{
+		for (Map.Entry<String, String> entry : document.m_mapPositionPersonne
+				.entrySet()) {
 			documentTexte += entry.getKey() + ": " + entry.getValue() + "\n";
 		}
-		
+
 		p_doc.setText(documentTexte);
 	}
+
 	void afficherEvenementPersonne(Resultat resultat) {
-		//initialiser
+		// initialiser
 		init();
-		
+
 		System.out.println("on a trouvé" + resultat.listeDesPersonnes.size());
 		// s'il y a juste une personne trouvée
 		if (resultat.listeDesPersonnes == null)
 			System.out.println("C'Est liste qui est null");
 		if (resultat.listeDesPersonnes.isEmpty()) {
 			afficherNotFind();
-			
-			
-		} 
-		
+
+		}
+
 		else if (resultat.listeDesPersonnes.size() == 1) {
-			
+
 			lblDocuments.setText("Documents");
 			afficherPersonne(resultat.listeDesPersonnes.get(0));
 			btnCharger.setEnabled(false);
-		}
-		else
-		{
+		} else {
 			lblDocuments.setText("Personnes");
 			afficherListePersonnes(resultat.listeDesPersonnes);
 			btnCharger.setEnabled(true);
@@ -401,20 +393,15 @@ public class Interface extends JFrame implements ActionListener {
 	}
 
 	void chargerDocumentsPersonne() {
-		if(entrainAfficherPersonne)
-		{
+		if (entrainAfficherPersonne) {
 			afficherDocument(m_selectedDocument);
-		}
-		else
-		{
+		} else {
 			afficherPersonne(m_selectedPersonne);
 			entrainAfficherPersonne = true;
 			btnCharger.setEnabled(false);
 		}
 
 	}
-
-
 
 	// activer un bouton
 	public void activerBouton(JButton bouton) {
@@ -424,64 +411,62 @@ public class Interface extends JFrame implements ActionListener {
 	public void desactiverBouton(JButton bouton) {
 		bouton.setEnabled(false);
 	}
-	
-	public void activerEcritureChamp(JTextField text)
-	{
+
+	public void activerEcritureChamp(JTextField text) {
 		text.setEditable(true);
 	}
-	public void desactiverEcritureChamp(JTextField text)
-	{
+
+	public void desactiverEcritureChamp(JTextField text) {
 		text.setEditable(false);
 	}
-//	public void desactiverChamp(JTextField text)
-//	{
-//		text.setEnabled(false);
-//	}
 
-	public void GestionAjout()
-	{
+	// public void desactiverChamp(JTextField text)
+	// {
+	// text.setEnabled(false);
+	// }
+
+	public void GestionAjout() {
 		activerBouton(btnOk);
 		btnAjouter.setText("Annuler");
 		btnAjouter.setActionCommand(ANNULER);
-		
+
 		desactiverBouton(btnCharger);
 		desactiverBouton(btnChercher);
 		desactiverBouton(btnQuitter);
-		
+
 		activerEcritureChamp(m_position);
 		activerEcritureChamp(m_noPersonne);
-		
+
 		desactiverEcritureChamp(m_nom);
 		desactiverEcritureChamp(m_prenom);
 		desactiverEcritureChamp(m_numero);
 		p_Evenement.setEnabled(false);
 		p_doc.setEditable(false);
 		p_documents.setEnabled(false);
-	
+
 	}
-	
-	public void Annuler()
-	{
+
+	public void Annuler() {
 		desactiverBouton(btnOk);
 		btnAjouter.setText("Ajouter");
 		btnAjouter.setActionCommand(AJOUTER);
-		
+
 		activerBouton(btnCharger);
 		activerBouton(btnChercher);
 		activerBouton(btnQuitter);
-		
+
 		m_position.setText("");
 		desactiverEcritureChamp(m_position);
 		m_noPersonne.setText("");
 		desactiverEcritureChamp(m_noPersonne);
-		
+
 		activerEcritureChamp(m_nom);
 		activerEcritureChamp(m_prenom);
 		activerEcritureChamp(m_numero);
 		p_Evenement.setEnabled(true);
 		p_doc.setEnabled(true);
 		p_documents.setEnabled(true);
-		
+
 	}
 
 	public void changed() {
@@ -493,6 +478,15 @@ public class Interface extends JFrame implements ActionListener {
 
 	}
 
+	public void quitter() {
+		int selectedOption = JOptionPane.showConfirmDialog(null,
+				"voulez vous vraiment quitter O/N ?", "Choose",
+				JOptionPane.YES_NO_OPTION);
+		if (selectedOption == JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
@@ -501,23 +495,22 @@ public class Interface extends JFrame implements ActionListener {
 			m_resultat = m_execution.recherche(m_numero.getText(),
 					m_prenom.getText(), m_nom.getText());
 			afficherEvenementPersonne(m_resultat);
-			
+
 		} else if (command.equals(CHARGER)) {
 			chargerDocumentsPersonne();
 		} else if (command.equals(AJOUTER)) {
-			GestionAjout();	
+			GestionAjout();
 		} else if (command.equals(ANNULER)) {
-			Annuler();	
+			Annuler();
 		} else if (command.equals(OK)) {
 
-			String message = m_execution.addCommentaire(m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre, m_noPersonne.getText(),m_position.getText());
-			JOptionPane
-			.showMessageDialog(null,
-					message);
-			
+			String message = m_execution.addCommentaire(
+					m_selectedDocument.m_numeroDoc, m_selectedDocument.m_titre,
+					m_noPersonne.getText(), m_position.getText());
+			JOptionPane.showMessageDialog(null, message);
 
 		} else if (command.equals(QUITTER)) {
-			System.exit(0);
+			quitter();
 		}
 
 	}
