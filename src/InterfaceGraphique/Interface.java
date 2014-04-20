@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javax.swing.JLayeredPane;
+
 
 public class Interface extends JFrame implements ActionListener {
 
@@ -399,6 +399,7 @@ public class Interface extends JFrame implements ActionListener {
 			afficherPersonne(m_selectedPersonne);
 			entrainAfficherPersonne = true;
 			btnCharger.setEnabled(false);
+			lblDocuments.setText("Documents");
 		}
 
 	}

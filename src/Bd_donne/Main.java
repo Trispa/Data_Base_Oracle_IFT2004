@@ -1,6 +1,5 @@
 package Bd_donne;
 
-import javax.swing.JOptionPane;
 
 import InterfaceGraphique.Interface;
 
