@@ -375,7 +375,7 @@ public class Interface extends JFrame implements ActionListener {
 		//initialiser
 		init();
 		
-		System.out.println("on a trouvŽ" + resultat.listeDesPersonnes.size());
+		System.out.println("on a trouvé" + resultat.listeDesPersonnes.size());
 		// s'il y a juste une personne trouvée
 		if (resultat.listeDesPersonnes == null)
 			System.out.println("C'Est liste qui est null");

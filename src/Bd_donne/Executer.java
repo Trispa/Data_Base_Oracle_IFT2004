@@ -26,7 +26,7 @@ public class Executer {
 	{
 		if(ex.getMessage().indexOf("violation de contrainte") > 0)
 		{
-			return "Impossible d'ajouter le commentaire. Vrifiez que le numro personne entr existe bien ou que votre nom d'utilisateur existe bien comme abonn.";
+			return "Impossible d'ajouter le commentaire. Vérifiez que le numéro personne entré existe bien ou que votre nom d'utilisateur existe bien comme abonné.";
 					
 		}
 
